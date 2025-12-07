@@ -485,8 +485,8 @@ export const PrismaticArtifact = () => {
 
     return (
         // Positioned at the center of Philosophy section to serve as background
-        <group position={[isMobile ? 0 : -2.5, isMobile ? 0 : POS_PHILOSOPHY * height, 0]} ref={groupRef}>
-            <mesh scale={isMobile ? 1.5 : 2.2}>
+        <group position={[0, isMobile ? 0 : POS_PHILOSOPHY * height, isMobile ? 0 : -4]} ref={groupRef}>
+            <mesh scale={isMobile ? 1.5 : 2.8}>
                 <icosahedronGeometry args={[1, 0]} />
                 <MeshTransmissionMaterial
                     backside
