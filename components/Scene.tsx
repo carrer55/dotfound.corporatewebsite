@@ -14,13 +14,12 @@ const POS_PRODUCTS = -1.0 * SECTION_SPACING; // Page 1ish
 const POS_PHILOSOPHY = POS_PRODUCTS - 2.3; // Wider gap
 const POS_VISION = POS_PHILOSOPHY - 1.5;
 const POS_DOT = POS_VISION - 1.1; // Narrower gap
-const POS_FOOTER = POS_DOT - 1.0;
+const POS_FOOTER = POS_DOT - 1.2;
 
 // Total height based on the last element position
-// We add 1.0 for the footer itself.
-// POS_FOOTER is approx -6.4. So total pages needs to cover roughly 7.5 height units.
-// Let's calibrate: 0 (Hero) + 1.5 + 2.3 + 1.5 + 1.1 + 1.0 = 7.4
-const TOTAL_PAGES = 8.5; 
+// We add extra space to ensure footer is visible.
+// Let's calibrate: 0 (Hero) + 1.5 + 2.3 + 1.5 + 1.1 + 1.2 = 7.6
+const TOTAL_PAGES = 9.0; 
 
 // --- Custom Shaders and Components (Reused) ---
 
@@ -484,10 +483,8 @@ export const PrismaticArtifact = () => {
     });
 
     return (
-        // Raised Y position significantly to align with start of section text
-        // Was +2.2, now +3.5 to move it up.
-        // For mobile reuse, we might need to adjust position via props, but sticking to logic:
-        <group position={[isMobile ? 0 : -2.5, isMobile ? 0 : POS_PHILOSOPHY * height + 3.5, 0]} ref={groupRef}>
+        // Position aligned with Philosophy section center
+        <group position={[isMobile ? 0 : -2.5, isMobile ? 0 : POS_PHILOSOPHY * height, 0]} ref={groupRef}>
             <mesh scale={isMobile ? 1.5 : 2.2}>
                 <icosahedronGeometry args={[1, 0]} />
                 <MeshTransmissionMaterial
@@ -549,22 +546,21 @@ export const KineticGrid = () => {
         }
 
         const time = state.clock.elapsedTime;
-        
+
         // --- UPDATED VISIBILITY LOGIC ---
-        // Range: From before Vision text (allows entry animation) through to Dot section
-        // POS_VISION is approx -5.3. POS_DOT is approx -6.4.
+        // Vision section: Fully visible when the Vision section is in view
+        // POS_VISION is approx -5.3, we want grid visible for the entire section
         const visionPagePos = Math.abs(POS_VISION);
-        
-        // Start animation 1.5 units before Vision center so it is fully built/active when text arrives
-        const startPage = Math.max(0, visionPagePos - 1.5);
-        
-        // Duration: Distance to Dot + extra buffer to keep it alive until Dot fully takes over
-        // Wide duration (3.5 units) covers the entry, the text reading phase, and the transition to the next section
-        const durationPages = 3.5; 
-        
+
+        // Start animation 2.0 units before Vision center for smooth entry
+        const startPage = Math.max(0, visionPagePos - 2.0);
+
+        // Duration: Cover entire Vision section + extra buffer
+        const durationPages = 4.0;
+
         const startOffset = startPage / (TOTAL_PAGES - 1);
         const duration = durationPages / (TOTAL_PAGES - 1);
-        
+
         const transition = scroll?.curve(startOffset, duration) || 0;
         // --------------------------------
 
@@ -597,9 +593,8 @@ export const KineticGrid = () => {
     });
 
     return (
-        // Raised Y position to align with start of VISION section
-        // Was +0, now +2.5 to move it up
-        <group position={[isMobile ? 0 : 2.5, POS_VISION * height + 2.5, 0]} rotation={[Math.PI / 4, Math.PI / 4, 0]}>
+        // Position aligned with Vision section center
+        <group position={[isMobile ? 0 : 2.5, POS_VISION * height, 0]} rotation={[Math.PI / 4, Math.PI / 4, 0]}>
             <instancedMesh ref={meshRef} args={[undefined, undefined, total]}>
                 <boxGeometry args={[0.2, 0.2, 0.2]} />
                 <meshStandardMaterial roughness={0.2} metalness={0.8} />
@@ -673,10 +668,8 @@ export const Singularity = ({ colorStart = '#ff3300', colorEnd = '#000000', scal
     });
 
     return (
-        // Raised position to align with start of .The DOT section
-        // Was +2.5, now +1.5 to lower it slightly from the very top
-        // If reusing in mobile scene (where 0,0,0 is center), we check parent scroll or just default
-        <group position={[0, isMobile ? 0 : POS_DOT * height + 1.5, 0]} scale={scale}>
+        // Position aligned with .The DOT section center
+        <group position={[0, isMobile ? 0 : POS_DOT * height, 0]} scale={scale}>
             <points>
                 <bufferGeometry>
                     <bufferAttribute attach="attributes-position" count={particleCount} array={positions} itemSize={3} />
@@ -685,7 +678,7 @@ export const Singularity = ({ colorStart = '#ff3300', colorEnd = '#000000', scal
                 <pointsMaterial size={0.03} vertexColors transparent opacity={0.8} blending={THREE.AdditiveBlending} depthWrite={false} />
             </points>
             <mesh ref={blackHoleRef}>
-                <sphereGeometry args={[1.8, 32, 32]} /> 
+                <sphereGeometry args={[1.8, 32, 32]} />
                 {/* @ts-ignore */}
                 <blackHoleMaterial transparent />
             </mesh>
