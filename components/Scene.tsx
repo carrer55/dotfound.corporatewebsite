@@ -484,7 +484,7 @@ export const PrismaticArtifact = () => {
     });
 
     // Desktop: Position at the start (top) of Philosophy section as background
-    const yPosition = isMobile ? 0 : (POS_PHILOSOPHY + 1.0) * height;
+    const yPosition = isMobile ? 0 : (POS_PHILOSOPHY + 0.75) * height;
 
     return (
         <group position={[isMobile ? 0 : -2.5, yPosition, 0]} ref={groupRef}>
