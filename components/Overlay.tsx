@@ -88,7 +88,7 @@ export const Overlay: React.FC<OverlayProps> = ({ onNavigate }) => {
 
             {/* Section 3: Prismatic (Now Philosophy) */}
             <Section className="items-center justify-start md:pt-20">
-                <div className="max-w-5xl relative pointer-events-auto md:ml-20" data-hover>
+                <div className="max-w-5xl relative pointer-events-auto md:ml-auto md:mr-20" data-hover>
                     <motion.div
                         initial={{ opacity: 0, filter: "blur(10px)" }}
                         whileInView={{ opacity: 1, filter: "blur(0px)" }}
@@ -110,7 +110,7 @@ export const Overlay: React.FC<OverlayProps> = ({ onNavigate }) => {
             </Section>
 
             {/* Section 4: Kinetic Grid (Now Vision) */}
-            <Section className="items-center justify-center md:items-start text-center md:text-left mb-[10vh]">
+            <Section className="items-center justify-center md:items-start text-center md:text-left mb-[50vh]">
                  <div className="max-w-5xl relative pointer-events-auto" data-hover>
                     <motion.div
                          initial={{ opacity: 0, scale: 0.95 }}

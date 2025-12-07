@@ -12,15 +12,14 @@ const SECTION_SPACING = 1.5; // 1.0 = adjacent, 1.5 = 50vh gap
 // Explicit positions for variable spacing
 const POS_PRODUCTS = -1.0 * SECTION_SPACING; // Page 1ish
 const POS_PHILOSOPHY = POS_PRODUCTS - 2.3; // Wider gap
-const POS_VISION = POS_PHILOSOPHY - 1.5;
-const POS_DOT = POS_VISION - 1.1; // Narrower gap
-const POS_FOOTER = POS_DOT - 1.0;
+const POS_VISION = POS_PHILOSOPHY - 0.8; // Reduced gap to pull up
+const POS_DOT = POS_VISION - 0.9; // Reduced gap
+const POS_FOOTER = POS_DOT - 0.8; // Reduced gap
 
 // Total height based on the last element position
 // We add 1.0 for the footer itself.
-// POS_FOOTER is approx -6.4. So total pages needs to cover roughly 7.5 height units.
-// Let's calibrate: 0 (Hero) + 1.5 + 2.3 + 1.5 + 1.1 + 1.0 = 7.4
-const TOTAL_PAGES = 8.5; 
+// Let's calibrate: 0 (Hero) + 1.5 + 2.3 + 0.8 + 0.9 + 0.8 = 6.3
+const TOTAL_PAGES = 7.5; 
 
 // --- Custom Shaders and Components (Reused) ---
 
