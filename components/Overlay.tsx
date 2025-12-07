@@ -110,7 +110,7 @@ export const Overlay: React.FC<OverlayProps> = ({ onNavigate }) => {
             </Section>
 
             {/* Section 4: Kinetic Grid (Now Vision) */}
-            <Section className="items-center justify-center md:items-start text-center md:text-left">
+            <Section className="items-center justify-center md:items-start text-center md:text-left mb-[10vh]">
                  <div className="max-w-5xl relative pointer-events-auto" data-hover>
                     <motion.div
                          initial={{ opacity: 0, scale: 0.95 }}
@@ -157,9 +157,9 @@ export const Overlay: React.FC<OverlayProps> = ({ onNavigate }) => {
                 </div>
             </Section>
 
-            {/* Section 6: A DOT EXPANDS with Footer */}
-            <Section className="items-start justify-between !mb-0">
-                <motion.div
+            {/* Section 6: Footer */}
+            <Section className="items-center justify-center relative !mb-0">
+                <motion.div 
                     className="text-center w-full"
                     initial={{ opacity: 0, scale: 0.9 }}
                     whileInView={{ opacity: 1, scale: 1 }}
@@ -168,17 +168,17 @@ export const Overlay: React.FC<OverlayProps> = ({ onNavigate }) => {
                     <h2 className="w-full text-[12vw] font-display font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-b from-white to-transparent opacity-80 leading-none tracking-tighter">
                         A DOT EXPANDS
                     </h2>
-                    <p className="text-gray-300 leading-relaxed text-sm md:text-base max-w-2xl mx-auto">
+                    <p className="text-gray-300 leading-relaxed text-sm md:text-base mb-12 max-w-2xl mx-auto">
                         一つの小さな点から、大きな波が生まれている。<br />
                         一人の小さな輝きが、<br />
                         今この瞬間も誰かの人生を変えている。
                     </p>
                 </motion.div>
 
-                {/* Footer */}
-                <div className="w-full flex flex-col md:flex-row md:justify-between items-center md:items-end pointer-events-auto gap-4 md:gap-0">
-                    <button
-                        className="text-[10px] font-mono text-gray-600 tracking-widest hover:text-white transition-colors uppercase"
+                {/* Footer Bottom Bar */}
+                <div className="absolute bottom-8 left-0 w-full px-6 md:px-20 flex flex-col md:flex-row md:justify-between items-center md:items-end pointer-events-auto gap-4 md:gap-0">
+                    <button 
+                        className="text-[10px] font-mono text-gray-600 tracking-widest hover:text-white transition-colors uppercase" 
                         data-hover
                         onClick={() => setShowPrivacyModal(true)}
                     >
