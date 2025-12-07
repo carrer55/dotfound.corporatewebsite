@@ -1,0 +1,64 @@
+{
+  "name": "株式会社ドットファウンド",
+  "short_name": ".Found Inc.",
+  "description": "株式会社ドットファウンドは、AI・テクノロジーの力で人の心を起点とした革新的なソリューションを提供します。静岡県富士宮市発のテックカンパニー。",
+  "start_url": "/",
+  "scope": "/",
+  "id": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#050505",
+  "theme_color": "#050505",
+  "lang": "ja",
+  "dir": "ltr",
+  "categories": ["business", "technology", "productivity"],
+  "icons": [
+    {
+      "src": "/dot.favicon_(16×16).png",
+      "sizes": "16x16",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/dot.favicon_(32×32).png",
+      "sizes": "32x32",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/dot.favicon.png",
+      "sizes": "64x64",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/dot.favicon_(180×180).png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/dot.favicon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/dot.favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/ogp(1200_x_630px).jpeg",
+      "sizes": "1200x630",
+      "type": "image/jpeg",
+      "form_factor": "wide",
+      "label": "株式会社ドットファウンド ホーム画面"
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
+}
