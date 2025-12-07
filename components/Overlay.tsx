@@ -158,7 +158,7 @@ export const Overlay: React.FC<OverlayProps> = ({ onNavigate }) => {
             </Section>
 
             {/* Section 6: Footer */}
-            <Section className="items-start justify-between relative !mb-0">
+            <Section className="items-start justify-between relative !mb-0 !h-auto min-h-screen">
                 <motion.div
                     className="text-center w-full pt-20 md:pt-32"
                     initial={{ opacity: 0, scale: 0.9 }}
