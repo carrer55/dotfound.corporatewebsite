@@ -158,9 +158,9 @@ export const Overlay: React.FC<OverlayProps> = ({ onNavigate }) => {
             </Section>
 
             {/* Section 6: Footer */}
-            <Section className="items-start justify-between relative !mb-0 !h-auto min-h-screen">
+            <section className="h-auto w-screen p-6 md:p-20 flex flex-col justify-between snap-start snap-always" style={{ contain: 'layout style', willChange: 'transform' }}>
                 <motion.div
-                    className="text-center w-full pt-20 md:pt-32"
+                    className="text-center w-full pt-20 md:pt-32 mb-20"
                     initial={{ opacity: 0, scale: 0.9 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.8 }}
@@ -175,8 +175,8 @@ export const Overlay: React.FC<OverlayProps> = ({ onNavigate }) => {
                     </p>
                 </motion.div>
 
-                {/* Footer Bottom Bar - Now at the bottom of the section */}
-                <div className="w-full px-6 md:px-20 pb-8 flex flex-col md:flex-row md:justify-between items-center md:items-end pointer-events-auto gap-4 md:gap-0">
+                {/* Footer Bottom Bar */}
+                <div className="w-full flex flex-col md:flex-row md:justify-between items-center md:items-end pointer-events-auto gap-4 md:gap-0">
                     <button
                         className="text-[10px] font-mono text-gray-600 tracking-widest hover:text-white transition-colors uppercase"
                         data-hover
@@ -188,7 +188,7 @@ export const Overlay: React.FC<OverlayProps> = ({ onNavigate }) => {
                         © 2025 .Found inc. All rights reserved.
                     </p>
                 </div>
-            </Section>
+            </section>
 
             {/* Privacy Policy Modal */}
             {createPortal(
