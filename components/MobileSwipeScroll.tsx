@@ -831,7 +831,7 @@ const Section5 = ({ isExiting }: { isExiting: boolean }) => (
             <p className="text-red-500 text-xs tracking-widest mb-6 font-mono drop-shadow-md">
                 A SMALL YET PROFOUND BEGINNING
             </p>
-            <h2 className="text-5xl font-display font-bold tracking-wider mb-8 leading-none text-transparent bg-clip-text bg-gradient-to-b from-white to-white/60 drop-shadow-xl">
+            <h2 className="text-4xl sm:text-5xl font-display font-bold tracking-wider mb-8 leading-none text-transparent bg-clip-text bg-gradient-to-b from-white to-white/60 drop-shadow-xl">
                 [ .The DOT ]
             </h2>
             <div className="flex items-center justify-center gap-3 mb-8 drop-shadow-lg">
