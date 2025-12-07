@@ -87,8 +87,8 @@ export const Overlay: React.FC<OverlayProps> = ({ onNavigate }) => {
             </Section>
 
             {/* Section 3: Prismatic (Now Philosophy) */}
-            <Section className="items-center justify-start md:pt-20">
-                <div className="max-w-5xl relative pointer-events-auto md:ml-auto md:mr-20" data-hover>
+            <Section className="items-center justify-center">
+                <div className="max-w-5xl relative pointer-events-auto md:ml-20" data-hover>
                     <motion.div
                         initial={{ opacity: 0, filter: "blur(10px)" }}
                         whileInView={{ opacity: 1, filter: "blur(0px)" }}

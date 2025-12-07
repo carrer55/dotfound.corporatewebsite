@@ -12,9 +12,9 @@ const SECTION_SPACING = 1.5; // 1.0 = adjacent, 1.5 = 50vh gap
 // Explicit positions for variable spacing
 const POS_PRODUCTS = -1.0 * SECTION_SPACING; // Page 1ish
 const POS_PHILOSOPHY = POS_PRODUCTS - 2.3; // Wider gap
-const POS_VISION = POS_PHILOSOPHY - 1.5; // Standard gap
+const POS_VISION = POS_PHILOSOPHY - 1.5;
 const POS_DOT = POS_VISION - 1.1; // Narrower gap
-const POS_FOOTER = POS_DOT - 1.0; // Standard gap
+const POS_FOOTER = POS_DOT - 1.0;
 
 // Total height based on the last element position
 // We add 1.0 for the footer itself.
