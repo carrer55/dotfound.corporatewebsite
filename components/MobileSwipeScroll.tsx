@@ -62,8 +62,8 @@ const MobileHero: React.FC<MobileHeroProps> = ({ isExiting }) => {
             
             if (isExiting) {
                 // === EXIT: PORTAL ASCENSION ===
-                // Speed tuned for 500ms transition
-                const exitSpeed = delta * 4.0;
+                // Speed tuned for 1000ms transition
+                const exitSpeed = delta * 2.0;
 
                 // 1. Sphere: Expands to cover screen
                 sphereRef.current.scale.lerp(new THREE.Vector3(15, 15, 15), exitSpeed);
@@ -193,8 +193,8 @@ const Product3DComposition: React.FC<Product3DCompositionProps> = ({ isExiting }
         }
 
         const time = state.clock.elapsedTime;
-        // Speed tuned for 500ms transition
-        const lerpSpeed = delta * 4.0; 
+        // Speed tuned for 1000ms transition
+        const lerpSpeed = delta * 2.0; 
 
         if (groupRef.current && materialRef.current) {
             if (isExiting) {
@@ -287,7 +287,7 @@ const MobilePhilosophyDiamond: React.FC<MobilePhilosophyDiamondProps> = ({ isExi
         }
 
         const time = state.clock.elapsedTime;
-        const lerpSpeed = delta * 6.0;
+        const lerpSpeed = delta * 3.0;
 
         // Entry Lerp Speed: Slow and elegant
         const arrivalSpeed = delta * 0.8;
@@ -405,10 +405,10 @@ const MobileKineticGrid: React.FC<MobileKineticGridProps> = ({ isExiting }) => {
         const time = state.clock.elapsedTime;
 
         entryProgress.current = THREE.MathUtils.lerp(entryProgress.current, 1, delta * 1.5);
-
-        // Exit: Speed up for 500ms transition
+        
+        // Exit: Speed up slightly for 1000ms transition
         if (isExiting) {
-             exitProgress.current = THREE.MathUtils.lerp(exitProgress.current, 1, delta * 5.0);
+             exitProgress.current = THREE.MathUtils.lerp(exitProgress.current, 1, delta * 2.5);
         } else {
              exitProgress.current = 0;
         }
@@ -922,9 +922,9 @@ export const MobileSwipeScroll: React.FC<MobileSwipeScrollProps> = ({ onNavigate
 
         const swipeDistance = touchStartY.current - touchEndY.current;
         const threshold = 50;
-
-        // UNIFIED TRANSITION TIME (500ms)
-        const TRANSITION_TIME = 500;
+        
+        // UNIFIED TRANSITION TIME (1000ms)
+        const TRANSITION_TIME = 1000;
         const BUFFER_TIME = 200;
 
         if (Math.abs(swipeDistance) > threshold) {
@@ -1005,7 +1005,7 @@ export const MobileSwipeScroll: React.FC<MobileSwipeScrollProps> = ({ onNavigate
     };
 
     const scrollToSection = (index: number) => {
-        const TRANSITION_TIME = 500;
+        const TRANSITION_TIME = 1000;
         const BUFFER_TIME = 200;
 
         if (!isTransitioning && index !== currentSection) {
