@@ -5,8 +5,19 @@ import { TextDecoder } from './TextDecoder';
 import { ViewState } from '../types';
 import { PrivacyPolicyPage } from './ContentPages';
 
+// ╔═══════════════════════════════════════════════════════════════════════╗
+// ║              🔒 LOCKED DESKTOP LAYOUT CONFIGURATION 🔒                ║
+// ║                                                                       ║
+// ║  Section spacing values are LOCKED to maintain alignment with 3D     ║
+// ║  scene objects in Scene.tsx. DO NOT modify mb-[50vh] or section      ║
+// ║  margin overrides (mb-[10vh], !mb-0) without updating Scene.tsx.     ║
+// ╚═══════════════════════════════════════════════════════════════════════╝
+
+// 🔒 LOCKED DESKTOP LAYOUT - DO NOT MODIFY
+// Section spacing is locked to maintain alignment with 3D scene objects
 const Section = ({ children, className = "" }: { children?: React.ReactNode, className?: string }) => {
     return (
+        // mb-[50vh]: LOCKED VALUE - Critical for section spacing alignment
         <section className={`h-screen w-screen p-6 md:p-20 flex flex-col justify-center snap-start snap-always mb-[50vh] last:mb-0 ${className}`} style={{ contain: 'layout style', willChange: 'transform' }}>
             {children}
         </section>
@@ -110,6 +121,7 @@ export const Overlay: React.FC<OverlayProps> = ({ onNavigate }) => {
             </Section>
 
             {/* Section 4: Kinetic Grid (Now Vision) */}
+            {/* 🔒 LOCKED: mb-[10vh] override - DO NOT MODIFY */}
             <Section className="items-center justify-center md:items-start text-center md:text-left mb-[10vh]">
                  <div className="max-w-5xl relative pointer-events-auto" data-hover>
                     <motion.div
@@ -158,6 +170,7 @@ export const Overlay: React.FC<OverlayProps> = ({ onNavigate }) => {
             </Section>
 
             {/* Section 6: Footer */}
+            {/* 🔒 LOCKED: !mb-0 override - DO NOT MODIFY */}
             <Section className="items-center justify-center relative !mb-0">
                 <motion.div 
                     className="text-center w-full"

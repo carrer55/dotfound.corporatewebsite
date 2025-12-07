@@ -7,20 +7,31 @@ import { Overlay } from './Overlay';
 import { ViewState } from '../types';
 import { useAdaptiveQuality, useFrameThrottle } from '../utils/performance';
 
+// ╔═══════════════════════════════════════════════════════════════════════╗
+// ║              🔒 LOCKED DESKTOP LAYOUT CONFIGURATION 🔒                ║
+// ║                                                                       ║
+// ║  All desktop layout values below are LOCKED and must NOT be modified ║
+// ║  These values ensure precise alignment between 3D objects and HTML   ║
+// ║  overlay sections. Any changes will break the layout calibration.    ║
+// ╚═══════════════════════════════════════════════════════════════════════╝
+
 // --- Global Spacing Configuration ---
+// ⚠️ LOCKED DESKTOP LAYOUT - DO NOT MODIFY THESE VALUES ⚠️
+// These values are locked to maintain the exact desktop layout positioning.
+// Any changes will break the carefully calibrated alignment between 3D objects and HTML overlay sections.
 const SECTION_SPACING = 1.5; // 1.0 = adjacent, 1.5 = 50vh gap
 // Explicit positions for variable spacing
-const POS_PRODUCTS = -1.0 * SECTION_SPACING; // Page 1ish
-const POS_PHILOSOPHY = POS_PRODUCTS - 2.3; // Wider gap
-const POS_VISION = POS_PHILOSOPHY - 1.5;
-const POS_DOT = POS_VISION - 1.1; // Narrower gap
-const POS_FOOTER = POS_DOT - 1.0;
+const POS_PRODUCTS = -1.0 * SECTION_SPACING; // Page 1ish = -1.5
+const POS_PHILOSOPHY = POS_PRODUCTS - 2.3; // Wider gap = -3.8
+const POS_VISION = POS_PHILOSOPHY - 1.5; // = -5.3
+const POS_DOT = POS_VISION - 1.1; // Narrower gap = -6.4
+const POS_FOOTER = POS_DOT - 1.0; // = -7.4
 
 // Total height based on the last element position
 // We add 1.0 for the footer itself.
 // POS_FOOTER is approx -6.4. So total pages needs to cover roughly 7.5 height units.
 // Let's calibrate: 0 (Hero) + 1.5 + 2.3 + 1.5 + 1.1 + 1.0 = 7.4
-const TOTAL_PAGES = 8.5; 
+const TOTAL_PAGES = 8.5; // LOCKED VALUE 
 
 // --- Custom Shaders and Components (Reused) ---
 
@@ -412,6 +423,7 @@ const DesktopProductPanel = () => {
     });
 
     return (
+        // 🔒 LOCKED DESKTOP POSITION - DO NOT MODIFY
         <group position={[0, POS_PRODUCTS * height, 0]}>
             {/* Dynamic Lights for the panel */}
             <pointLight position={[3, 2, 4]} intensity={1.5} color="#00ffff" distance={10} />
@@ -484,9 +496,11 @@ export const PrismaticArtifact = () => {
     });
 
     // Desktop: Position at the start (top) of Philosophy section as background
+    // 🔒 LOCKED DESKTOP Y-OFFSET: +0.8 - DO NOT MODIFY
     const yPosition = isMobile ? 0 : (POS_PHILOSOPHY + 0.8) * height;
 
     return (
+        // 🔒 LOCKED DESKTOP X-POSITION: -2.5 - DO NOT MODIFY
         <group position={[isMobile ? 0 : -2.5, yPosition, 0]} ref={groupRef}>
             <mesh scale={isMobile ? 1.5 : 2.2}>
                 <icosahedronGeometry args={[1, 0]} />
@@ -597,8 +611,8 @@ export const KineticGrid = () => {
     });
 
     return (
-        // Raised Y position to align with start of VISION section
-        // Was +0, now +2.5 to move it up
+        // 🔒 LOCKED DESKTOP POSITION - DO NOT MODIFY
+        // Desktop X: 2.5, Y-Offset: +2.5 from POS_VISION
         <group position={[isMobile ? 0 : 2.5, POS_VISION * height + 2.5, 0]} rotation={[Math.PI / 4, Math.PI / 4, 0]}>
             <instancedMesh ref={meshRef} args={[undefined, undefined, total]}>
                 <boxGeometry args={[0.2, 0.2, 0.2]} />
@@ -673,9 +687,8 @@ export const Singularity = ({ colorStart = '#ff3300', colorEnd = '#000000', scal
     });
 
     return (
-        // Raised position to align with start of .The DOT section
-        // Was +2.5, now +1.5 to lower it slightly from the very top
-        // If reusing in mobile scene (where 0,0,0 is center), we check parent scroll or just default
+        // 🔒 LOCKED DESKTOP POSITION - DO NOT MODIFY
+        // Desktop Y-Offset: +1.5 from POS_DOT
         <group position={[0, isMobile ? 0 : POS_DOT * height + 1.5, 0]} scale={scale}>
             <points>
                 <bufferGeometry>
