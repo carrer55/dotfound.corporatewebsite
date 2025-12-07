@@ -484,10 +484,8 @@ export const PrismaticArtifact = () => {
     });
 
     return (
-        // Raised Y position significantly to align with start of section text
-        // Was +2.2, now +3.5 to move it up.
-        // For mobile reuse, we might need to adjust position via props, but sticking to logic:
-        <group position={[isMobile ? 0 : -2.5, isMobile ? 0 : POS_PHILOSOPHY * height + 3.5, 0]} ref={groupRef}>
+        // Positioned at the center of Philosophy section to serve as background
+        <group position={[isMobile ? 0 : -2.5, isMobile ? 0 : POS_PHILOSOPHY * height, 0]} ref={groupRef}>
             <mesh scale={isMobile ? 1.5 : 2.2}>
                 <icosahedronGeometry args={[1, 0]} />
                 <MeshTransmissionMaterial
