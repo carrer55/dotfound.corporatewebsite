@@ -14,12 +14,12 @@ const POS_PRODUCTS = -1.0 * SECTION_SPACING; // Page 1ish
 const POS_PHILOSOPHY = POS_PRODUCTS - 2.3; // Wider gap
 const POS_VISION = POS_PHILOSOPHY - 1.5;
 const POS_DOT = POS_VISION - 1.1; // Narrower gap
-const POS_FOOTER = POS_DOT - 1.2;
+const POS_FOOTER = POS_DOT - 1.5;
 
 // Total height based on the last element position
-// We add extra space to ensure footer is visible.
-// Let's calibrate: 0 (Hero) + 1.5 + 2.3 + 1.5 + 1.1 + 1.2 = 7.6
-const TOTAL_PAGES = 9.0; 
+// We add extra space to ensure footer is fully visible.
+// Let's calibrate: 0 (Hero) + 1.5 + 2.3 + 1.5 + 1.1 + 1.5 = 7.9
+const TOTAL_PAGES = 10.0; 
 
 // --- Custom Shaders and Components (Reused) ---
 
