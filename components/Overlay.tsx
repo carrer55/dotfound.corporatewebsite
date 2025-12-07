@@ -57,7 +57,7 @@ export const Overlay: React.FC<OverlayProps> = ({ onNavigate }) => {
             </Section>
 
             {/* Section 2: Products (formerly Distortion) */}
-            <Section className="items-center justify-center md:items-end text-center md:text-right mb-[130vh]">
+            <Section className="items-center justify-center md:items-end text-center md:text-right">
                 <div className="max-w-5xl relative pointer-events-auto" data-hover>
                     <motion.div
                         initial={{ opacity: 0, x: 50 }}
