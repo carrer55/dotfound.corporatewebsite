@@ -157,10 +157,10 @@ export const Overlay: React.FC<OverlayProps> = ({ onNavigate }) => {
                 </div>
             </Section>
 
-            {/* Section 6: Footer */}
-            <section className="h-auto w-screen p-6 md:p-20 flex flex-col justify-between snap-start snap-always" style={{ contain: 'layout style', willChange: 'transform' }}>
+            {/* Section 6: A DOT EXPANDS */}
+            <Section className="items-center justify-center">
                 <motion.div
-                    className="text-center w-full pt-20 md:pt-32 mb-20"
+                    className="text-center w-full"
                     initial={{ opacity: 0, scale: 0.9 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.8 }}
@@ -168,27 +168,27 @@ export const Overlay: React.FC<OverlayProps> = ({ onNavigate }) => {
                     <h2 className="w-full text-[12vw] font-display font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-b from-white to-transparent opacity-80 leading-none tracking-tighter">
                         A DOT EXPANDS
                     </h2>
-                    <p className="text-gray-300 leading-relaxed text-sm md:text-base mb-12 max-w-2xl mx-auto">
+                    <p className="text-gray-300 leading-relaxed text-sm md:text-base max-w-2xl mx-auto">
                         一つの小さな点から、大きな波が生まれている。<br />
                         一人の小さな輝きが、<br />
                         今この瞬間も誰かの人生を変えている。
                     </p>
                 </motion.div>
+            </Section>
 
-                {/* Footer Bottom Bar */}
-                <div className="w-full flex flex-col md:flex-row md:justify-between items-center md:items-end pointer-events-auto gap-4 md:gap-0">
-                    <button
-                        className="text-[10px] font-mono text-gray-600 tracking-widest hover:text-white transition-colors uppercase"
-                        data-hover
-                        onClick={() => setShowPrivacyModal(true)}
-                    >
-                        PrivacyPolicy
-                    </button>
-                    <p className="text-[10px] text-gray-600 font-mono tracking-widest uppercase text-center md:text-right">
-                        © 2025 .Found inc. All rights reserved.
-                    </p>
-                </div>
-            </section>
+            {/* Footer - Not a scrolling section */}
+            <div className="w-screen px-6 md:px-20 pb-6 flex flex-col md:flex-row md:justify-between items-center md:items-end pointer-events-auto gap-4 md:gap-0">
+                <button
+                    className="text-[10px] font-mono text-gray-600 tracking-widest hover:text-white transition-colors uppercase"
+                    data-hover
+                    onClick={() => setShowPrivacyModal(true)}
+                >
+                    PrivacyPolicy
+                </button>
+                <p className="text-[10px] text-gray-600 font-mono tracking-widest uppercase text-center md:text-right">
+                    © 2025 .Found inc. All rights reserved.
+                </p>
+            </div>
 
             {/* Privacy Policy Modal */}
             {createPortal(
