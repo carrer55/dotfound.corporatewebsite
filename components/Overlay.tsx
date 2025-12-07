@@ -158,9 +158,9 @@ export const Overlay: React.FC<OverlayProps> = ({ onNavigate }) => {
             </Section>
 
             {/* Section 6: Footer */}
-            <Section className="items-center justify-center relative !mb-0">
-                <motion.div 
-                    className="text-center w-full"
+            <Section className="items-start justify-between relative !mb-0">
+                <motion.div
+                    className="text-center w-full pt-20 md:pt-32"
                     initial={{ opacity: 0, scale: 0.9 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.8 }}
@@ -175,10 +175,10 @@ export const Overlay: React.FC<OverlayProps> = ({ onNavigate }) => {
                     </p>
                 </motion.div>
 
-                {/* Footer Bottom Bar */}
-                <div className="absolute bottom-8 left-0 w-full px-6 md:px-20 flex flex-col md:flex-row md:justify-between items-center md:items-end pointer-events-auto gap-4 md:gap-0">
-                    <button 
-                        className="text-[10px] font-mono text-gray-600 tracking-widest hover:text-white transition-colors uppercase" 
+                {/* Footer Bottom Bar - Now at the bottom of the section */}
+                <div className="w-full px-6 md:px-20 pb-8 flex flex-col md:flex-row md:justify-between items-center md:items-end pointer-events-auto gap-4 md:gap-0">
+                    <button
+                        className="text-[10px] font-mono text-gray-600 tracking-widest hover:text-white transition-colors uppercase"
                         data-hover
                         onClick={() => setShowPrivacyModal(true)}
                     >
