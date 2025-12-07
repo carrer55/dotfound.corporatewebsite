@@ -157,8 +157,8 @@ export const Overlay: React.FC<OverlayProps> = ({ onNavigate }) => {
                 </div>
             </Section>
 
-            {/* Section 6: A DOT EXPANDS */}
-            <Section className="items-center justify-center">
+            {/* Section 6: A DOT EXPANDS with Footer */}
+            <Section className="items-start justify-between !mb-0">
                 <motion.div
                     className="text-center w-full"
                     initial={{ opacity: 0, scale: 0.9 }}
@@ -174,21 +174,21 @@ export const Overlay: React.FC<OverlayProps> = ({ onNavigate }) => {
                         今この瞬間も誰かの人生を変えている。
                     </p>
                 </motion.div>
-            </Section>
 
-            {/* Footer - Not a scrolling section */}
-            <div className="w-screen px-6 md:px-20 pb-6 flex flex-col md:flex-row md:justify-between items-center md:items-end pointer-events-auto gap-4 md:gap-0">
-                <button
-                    className="text-[10px] font-mono text-gray-600 tracking-widest hover:text-white transition-colors uppercase"
-                    data-hover
-                    onClick={() => setShowPrivacyModal(true)}
-                >
-                    PrivacyPolicy
-                </button>
-                <p className="text-[10px] text-gray-600 font-mono tracking-widest uppercase text-center md:text-right">
-                    © 2025 .Found inc. All rights reserved.
-                </p>
-            </div>
+                {/* Footer */}
+                <div className="w-full flex flex-col md:flex-row md:justify-between items-center md:items-end pointer-events-auto gap-4 md:gap-0">
+                    <button
+                        className="text-[10px] font-mono text-gray-600 tracking-widest hover:text-white transition-colors uppercase"
+                        data-hover
+                        onClick={() => setShowPrivacyModal(true)}
+                    >
+                        PrivacyPolicy
+                    </button>
+                    <p className="text-[10px] text-gray-600 font-mono tracking-widest uppercase text-center md:text-right">
+                        © 2025 .Found inc. All rights reserved.
+                    </p>
+                </div>
+            </Section>
 
             {/* Privacy Policy Modal */}
             {createPortal(
