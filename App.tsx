@@ -32,6 +32,27 @@ const useIsMobile = () => {
     return isMobile;
 };
 
+// Custom hook for tablet detection (iPad and similar devices)
+const useIsTablet = () => {
+    const [isTablet, setIsTablet] = useState(() => {
+        if (typeof window !== 'undefined') {
+            const width = window.innerWidth;
+            return width > 768 && width <= 1024;
+        }
+        return false;
+    });
+
+    useEffect(() => {
+        const checkTablet = () => {
+            const width = window.innerWidth;
+            setIsTablet(width > 768 && width <= 1024);
+        };
+        window.addEventListener('resize', checkTablet);
+        return () => window.removeEventListener('resize', checkTablet);
+    }, []);
+    return isTablet;
+};
+
 const App = () => {
     const [isLoaded, setIsLoaded] = useState(false);
     const [view, setView] = useState<ViewState>('HOME');
@@ -40,6 +61,8 @@ const App = () => {
     const [isCanvasVisible, setIsCanvasVisible] = useState(true); // New state to control Canvas visibility
     const [resetKey, setResetKey] = useState(0); // Key to force re-mount of Home scene/scroll
     const isMobile = useIsMobile();
+    const isTablet = useIsTablet();
+    const shouldUseMobileLayout = isMobile || isTablet;
 
     // Simulate initial asset loading
     useEffect(() => {
@@ -84,11 +107,11 @@ const App = () => {
     }, [isTransitioning, view]);
 
     return (
-        <div className={`w-full h-screen bg-[#050505] text-white overflow-hidden relative ${isMobile ? '' : 'cursor-none'}`}>
+        <div className={`w-full h-screen bg-[#050505] text-white overflow-hidden relative ${shouldUseMobileLayout ? '' : 'cursor-none'}`}>
             <GrainOverlay />
-            
-            {/* Only show custom cursor on non-mobile devices */}
-            {!isMobile && <CustomCursor />}
+
+            {/* Only show custom cursor on non-mobile/tablet devices */}
+            {!shouldUseMobileLayout && <CustomCursor />}
             
             <AnimatePresence>
                 {!isLoaded && <Loader key="loader" />}
@@ -102,8 +125,8 @@ const App = () => {
                 {view !== 'HOME' && <ContentPages view={view} onNavigate={handleNavigate} key="content" />}
             </AnimatePresence>
 
-            {/* Mobile Home View: Render special SwipeScroll component instead of main Canvas */}
-            {view === 'HOME' && isMobile ? (
+            {/* Mobile/Tablet Home View: Render special SwipeScroll component instead of main Canvas */}
+            {view === 'HOME' && shouldUseMobileLayout ? (
                 <div className={`absolute inset-0 z-0 transition-opacity duration-75 ${isCanvasVisible ? 'opacity-100' : 'opacity-0'}`} style={{ willChange: 'opacity', transform: 'translateZ(0)' }}>
                     <MobileSwipeScroll key={`mobile-home-${resetKey}`} onNavigate={handleNavigate} />
                 </div>
@@ -117,10 +140,10 @@ const App = () => {
                         className="w-full h-full"
                     >
                         <Suspense fallback={null}>
-                            <SceneWrapper 
-                                key={`scene-${view}-${resetKey}`} 
-                                mode={view === 'HOME' ? 'HOME' : 'AMBIENT'} 
-                                onNavigate={handleNavigate} 
+                            <SceneWrapper
+                                key={`scene-${view}-${resetKey}`}
+                                mode={view === 'HOME' ? 'HOME' : 'AMBIENT'}
+                                onNavigate={handleNavigate}
                             />
                         </Suspense>
                     </Canvas>
