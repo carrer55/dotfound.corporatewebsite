@@ -732,7 +732,7 @@ const Section1 = ({ isExiting }: { isExiting: boolean }) => (
 
 const Section2 = ({ onNavigate }: { onNavigate?: (view: ViewState) => void }) => (
     <div className="h-full flex items-center justify-center p-6 pointer-events-none">
-        <div className="text-center text-white z-10 w-full max-w-sm pointer-events-auto">
+        <div className="text-center text-white z-10 w-full max-w-sm md:max-w-lg pointer-events-auto">
             <p className="text-orange-400 text-xs tracking-widest mb-4 font-mono drop-shadow-md">
                 INNOVATIVE SOLUTION
             </p>
