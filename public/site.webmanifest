@@ -14,31 +14,31 @@
   "categories": ["business", "technology", "productivity"],
   "icons": [
     {
-      "src": "/df16.png",
+      "src": "/fdf16.png",
       "sizes": "16x16",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/df32.png",
+      "src": "/fdf32.png",
       "sizes": "32x32",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/df180.png",
+      "src": "/fdf180.png",
       "sizes": "180x180",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/df192.png",
+      "src": "/fdf192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/df512.png",
+      "src": "/fdf512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
