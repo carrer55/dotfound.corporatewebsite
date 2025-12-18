@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { createPortal } from 'react-dom';
-import { Helmet } from 'react-helmet-async';
+import { SEO } from './SEO';
 import { ViewState } from '../types';
 
 const FORM_ENDPOINT = "https://formspree.io/f/xeobddbo";
@@ -89,13 +89,13 @@ export const ProjectsPage = ({ onNavigate }: { onNavigate: (view: ViewState) => 
         animate="visible"
         exit="exit"
     >
-        <Helmet>
-            <title>プロダクト | 株式会社ドットファウンド</title>
-            <meta name="description" content="株式会社ドットファウンドのプロダクト一覧。SaaS・AI・ブロックチェーン・WEB開発を軸に、多様なソリューションをお届けします。" />
-            <meta property="og:title" content="プロダクト | 株式会社ドットファウンド" />
-            <meta property="og:description" content="株式会社ドットファウンドのプロダクト一覧。SaaS・AI・ブロックチェーン・WEB開発を軸に、多様なソリューションをお届けします。" />
-            <meta property="og:url" content="https://www.dotfound.co.jp/product" />
-        </Helmet>
+        <SEO
+            title="プロダクト | 株式会社ドットファウンド"
+            description="株式会社ドットファウンドのプロダクト一覧。SaaS・AI・ブロックチェーン・WEB開発を軸に、多様なソリューションをお届けします。"
+            ogTitle="プロダクト | 株式会社ドットファウンド"
+            ogDescription="株式会社ドットファウンドのプロダクト一覧。SaaS・AI・ブロックチェーン・WEB開発を軸に、多様なソリューションをお届けします。"
+            ogUrl="https://www.dotfound.co.jp/product"
+        />
         <motion.h1 variants={itemVariants} className="text-4xl sm:text-5xl md:text-8xl font-display font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-600 leading-none tracking-tighter">
             OUR<br />PRODUCTS
         </motion.h1>
@@ -154,13 +154,13 @@ export const AboutPage = ({ onNavigate }: { onNavigate: (view: ViewState) => voi
         animate="visible"
         exit="exit"
     >
-        <Helmet>
-            <title>会社概要 | 株式会社ドットファウンド</title>
-            <meta name="description" content="株式会社ドットファウンドの会社概要。AI・テクノロジーの力で人の心を起点とした革新的なソリューションを提供します。" />
-            <meta property="og:title" content="会社概要 | 株式会社ドットファウンド" />
-            <meta property="og:description" content="株式会社ドットファウンドの会社概要。AI・テクノロジーの力で人の心を起点とした革新的なソリューションを提供します。" />
-            <meta property="og:url" content="https://www.dotfound.co.jp/about" />
-        </Helmet>
+        <SEO
+            title="会社概要 | 株式会社ドットファウンド"
+            description="株式会社ドットファウンドの会社概要。AI・テクノロジーの力で人の心を起点とした革新的なソリューションを提供します。"
+            ogTitle="会社概要 | 株式会社ドットファウンド"
+            ogDescription="株式会社ドットファウンドの会社概要。AI・テクノロジーの力で人の心を起点とした革新的なソリューションを提供します。"
+            ogUrl="https://www.dotfound.co.jp/about"
+        />
         <motion.h1
             variants={itemVariants}
             className="text-4xl sm:text-5xl md:text-8xl font-display font-bold mb-16 text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-600 leading-none tracking-tighter"
@@ -255,13 +255,13 @@ export const PrivacyPolicyPage = ({ onNavigate, isModal }: { onNavigate: (view: 
         exit="exit"
     >
         {!isModal && (
-            <Helmet>
-                <title>プライバシーポリシー | 株式会社ドットファウンド</title>
-                <meta name="description" content="株式会社ドットファウンドのプライバシーポリシー。個人情報の保護に関する基本方針と取り扱いについて。" />
-                <meta property="og:title" content="プライバシーポリシー | 株式会社ドットファウンド" />
-                <meta property="og:description" content="株式会社ドットファウンドのプライバシーポリシー。個人情報の保護に関する基本方針と取り扱いについて。" />
-                <meta property="og:url" content="https://www.dotfound.co.jp/privacy" />
-            </Helmet>
+            <SEO
+                title="プライバシーポリシー | 株式会社ドットファウンド"
+                description="株式会社ドットファウンドのプライバシーポリシー。個人情報の保護に関する基本方針と取り扱いについて。"
+                ogTitle="プライバシーポリシー | 株式会社ドットファウンド"
+                ogDescription="株式会社ドットファウンドのプライバシーポリシー。個人情報の保護に関する基本方針と取り扱いについて。"
+                ogUrl="https://www.dotfound.co.jp/privacy"
+            />
         )}
         <motion.h1 variants={itemVariants} className="text-4xl sm:text-5xl md:text-8xl font-display font-bold mb-16 text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-600 leading-none tracking-tighter">
             PRIVACY<br />POLICY
@@ -505,13 +505,13 @@ ${formData.message}`;
             animate="visible"
             exit="exit"
         >
-            <Helmet>
-                <title>お問い合わせ | 株式会社ドットファウンド</title>
-                <meta name="description" content="株式会社ドットファウンドへのお問い合わせフォーム。サービスに関するご質問やご相談はこちらからお気軽にお問い合わせください。" />
-                <meta property="og:title" content="お問い合わせ | 株式会社ドットファウンド" />
-                <meta property="og:description" content="株式会社ドットファウンドへのお問い合わせフォーム。サービスに関するご質問やご相談はこちらからお気軽にお問い合わせください。" />
-                <meta property="og:url" content="https://www.dotfound.co.jp/contact" />
-            </Helmet>
+            <SEO
+                title="お問い合わせ | 株式会社ドットファウンド"
+                description="株式会社ドットファウンドへのお問い合わせフォーム。サービスに関するご質問やご相談はこちらからお気軽にお問い合わせください。"
+                ogTitle="お問い合わせ | 株式会社ドットファウンド"
+                ogDescription="株式会社ドットファウンドへのお問い合わせフォーム。サービスに関するご質問やご相談はこちらからお気軽にお問い合わせください。"
+                ogUrl="https://www.dotfound.co.jp/contact"
+            />
             <motion.h1 variants={itemVariants} className="text-4xl sm:text-5xl md:text-8xl font-display font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-600 leading-none tracking-tighter">
                 CONTACT
             </motion.h1>

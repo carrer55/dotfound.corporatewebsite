@@ -1,6 +1,5 @@
 import React, { Suspense, useState, useEffect, useCallback, memo } from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
 import { Canvas } from '@react-three/fiber';
 import { SceneWrapper } from './components/Scene';
 import { CustomCursor } from './components/CustomCursor';
@@ -12,6 +11,7 @@ import { TransitionCurtain } from './components/TransitionCurtain';
 import { ProjectsPage, AboutPage, ContactPage, PrivacyPolicyPage } from './components/ContentPages';
 import { MobileSwipeScroll } from './components/MobileSwipeScroll';
 import { ScrollToTop } from './components/ScrollToTop';
+import { SEO } from './components/SEO';
 import { ViewState } from './types';
 
 const useIsMobile = () => {
@@ -130,13 +130,13 @@ const App = () => {
             <GrainOverlay />
 
             {view === 'HOME' && (
-                <Helmet>
-                    <title>株式会社ドットファウンド（.Found Inc.）| AI・テクノロジーで人の心を起点とした革新的なソリューション | 静岡県富士宮市</title>
-                    <meta name="description" content="株式会社ドットファウンドは、AI・テクノロジーの力で人の心を起点とした革新的なソリューションを提供します。静岡県富士宮市発のテックカンパニー。" />
-                    <meta property="og:title" content="株式会社ドットファウンド（.Found Inc.）" />
-                    <meta property="og:description" content="株式会社ドットファウンドは、AI・テクノロジーの力で人の心を起点とした革新的なソリューションを提供します。静岡県富士宮市発のテックカンパニー。" />
-                    <meta property="og:url" content="https://www.dotfound.co.jp/" />
-                </Helmet>
+                <SEO
+                    title="株式会社ドットファウンド（.Found Inc.）| AI・テクノロジーで人の心を起点とした革新的なソリューション | 静岡県富士宮市"
+                    description="株式会社ドットファウンドは、AI・テクノロジーの力で人の心を起点とした革新的なソリューションを提供します。静岡県富士宮市発のテックカンパニー。"
+                    ogTitle="株式会社ドットファウンド（.Found Inc.）"
+                    ogDescription="株式会社ドットファウンドは、AI・テクノロジーの力で人の心を起点とした革新的なソリューションを提供します。静岡県富士宮市発のテックカンパニー。"
+                    ogUrl="https://www.dotfound.co.jp/"
+                />
             )}
 
             {!shouldUseMobileLayout && <CustomCursor />}
