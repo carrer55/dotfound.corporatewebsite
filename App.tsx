@@ -1,4 +1,6 @@
 import React, { Suspense, useState, useEffect, useCallback, memo } from 'react';
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { Canvas } from '@react-three/fiber';
 import { SceneWrapper } from './components/Scene';
 import { CustomCursor } from './components/CustomCursor';
@@ -7,13 +9,12 @@ import { Loader } from './components/Loader';
 import { AnimatePresence } from 'framer-motion';
 import { Navbar } from './components/Navbar';
 import { TransitionCurtain } from './components/TransitionCurtain';
-import { ContentPages } from './components/ContentPages';
+import { ProjectsPage, AboutPage, ContactPage, PrivacyPolicyPage } from './components/ContentPages';
 import { MobileSwipeScroll } from './components/MobileSwipeScroll';
+import { ScrollToTop } from './components/ScrollToTop';
 import { ViewState } from './types';
 
-// Custom hook for mobile detection
 const useIsMobile = () => {
-    // Initialize with correct value to avoid flash of content/cursor
     const [isMobile, setIsMobile] = useState(() => {
         if (typeof window !== 'undefined') {
             return window.innerWidth <= 768;
@@ -25,14 +26,12 @@ const useIsMobile = () => {
         const checkMobile = () => {
             setIsMobile(window.innerWidth <= 768);
         };
-        // Add listener
         window.addEventListener('resize', checkMobile);
         return () => window.removeEventListener('resize', checkMobile);
     }, []);
     return isMobile;
 };
 
-// Custom hook for tablet detection (iPad and similar devices)
 const useIsTablet = () => {
     const [isTablet, setIsTablet] = useState(() => {
         if (typeof window !== 'undefined') {
@@ -53,85 +52,119 @@ const useIsTablet = () => {
     return isTablet;
 };
 
+const pathToView = (path: string): ViewState => {
+    switch (path) {
+        case '/product':
+            return 'PRODUCT';
+        case '/about':
+            return 'ABOUT_US';
+        case '/contact':
+            return 'CONTACT';
+        case '/privacy':
+            return 'PRIVACY_POLICY';
+        default:
+            return 'HOME';
+    }
+};
+
+const viewToPath = (view: ViewState): string => {
+    switch (view) {
+        case 'PRODUCT':
+            return '/product';
+        case 'ABOUT_US':
+            return '/about';
+        case 'CONTACT':
+            return '/contact';
+        case 'PRIVACY_POLICY':
+            return '/privacy';
+        default:
+            return '/';
+    }
+};
+
 const App = () => {
     const [isLoaded, setIsLoaded] = useState(false);
-    const [view, setView] = useState<ViewState>('HOME');
-    const [targetView, setTargetView] = useState<ViewState>('HOME'); // Track target for transition text
+    const [targetView, setTargetView] = useState<ViewState>('HOME');
     const [isTransitioning, setIsTransitioning] = useState(false);
-    const [isCanvasVisible, setIsCanvasVisible] = useState(true); // New state to control Canvas visibility
-    const [resetKey, setResetKey] = useState(0); // Key to force re-mount of Home scene/scroll
+    const [isCanvasVisible, setIsCanvasVisible] = useState(true);
+    const [resetKey, setResetKey] = useState(0);
     const isMobile = useIsMobile();
     const isTablet = useIsTablet();
     const shouldUseMobileLayout = isMobile || isTablet;
+    const navigate = useNavigate();
+    const location = useLocation();
+    const view = pathToView(location.pathname);
 
-    // Simulate initial asset loading
     useEffect(() => {
         const timer = setTimeout(() => setIsLoaded(true), 2000);
         return () => clearTimeout(timer);
     }, []);
 
     const handleNavigate = useCallback((newView: ViewState) => {
-        // Allow navigation if different view OR if same view is HOME (to reset/reload)
         if (isTransitioning) return;
         if (newView === view && newView !== 'HOME') return;
 
         setTargetView(newView);
         setIsTransitioning(true);
 
-        // Timing logic synchronized with TransitionCurtain duration (0.9s duration + 0.1s max delay = 1.0s total enter time)
-
-        // 1. Wait for curtain to fully cover.
-        // We give it exactly 1000ms. At this point the screen is BLACK.
         setTimeout(() => {
-            // HIDE CANVAS immediately to prevent any visual glitches/artifacts from the previous scene
-            // appearing while the new scene mounts or renders its first frame.
             setIsCanvasVisible(false);
 
             if (newView === view) {
-                // If staying on same view (HOME reset), force remount by changing key
                 setResetKey(prev => prev + 1);
             } else {
-                setView(newView);
+                navigate(viewToPath(newView));
             }
 
-            // 2. Buffer to ensure DOM updates and 3D scenes allow for a frame to render while hidden.
-            // Increased buffer slightly to accommodate heavier pages like Privacy Policy.
             setTimeout(() => {
-                // SHOW CANVAS again just before curtain reveals.
-                // Since the curtain exit animation takes time, the canvas will be revealed behind it.
                 setIsCanvasVisible(true);
                 setIsTransitioning(false);
             }, 150);
 
-        }, 1050); // Slightly longer than 1.0s to ensure safety
-    }, [isTransitioning, view]);
+        }, 1050);
+    }, [isTransitioning, view, navigate]);
 
     return (
         <div className={`w-full h-screen bg-[#050505] text-white overflow-hidden relative ${shouldUseMobileLayout ? '' : 'cursor-none'}`}>
+            <ScrollToTop />
             <GrainOverlay />
 
-            {/* Only show custom cursor on non-mobile/tablet devices */}
+            {view === 'HOME' && (
+                <Helmet>
+                    <title>株式会社ドットファウンド（.Found Inc.）| AI・テクノロジーで人の心を起点とした革新的なソリューション | 静岡県富士宮市</title>
+                    <meta name="description" content="株式会社ドットファウンドは、AI・テクノロジーの力で人の心を起点とした革新的なソリューションを提供します。静岡県富士宮市発のテックカンパニー。" />
+                    <meta property="og:title" content="株式会社ドットファウンド（.Found Inc.）" />
+                    <meta property="og:description" content="株式会社ドットファウンドは、AI・テクノロジーの力で人の心を起点とした革新的なソリューションを提供します。静岡県富士宮市発のテックカンパニー。" />
+                    <meta property="og:url" content="https://www.dotfound.co.jp/" />
+                </Helmet>
+            )}
+
             {!shouldUseMobileLayout && <CustomCursor />}
-            
+
             <AnimatePresence>
                 {!isLoaded && <Loader key="loader" />}
             </AnimatePresence>
 
             <Navbar currentView={view} onNavigate={handleNavigate} />
-            
+
             <TransitionCurtain isVisible={isTransitioning} targetView={targetView} />
 
             <AnimatePresence mode="wait">
-                {view !== 'HOME' && <ContentPages view={view} onNavigate={handleNavigate} key="content" />}
+                <Routes location={location} key={location.pathname}>
+                    <Route path="/" element={null} />
+                    <Route path="/product" element={<div className="absolute inset-0 z-20 pointer-events-auto overflow-y-auto overscroll-contain"><div className="min-h-full"><ProjectsPage onNavigate={handleNavigate} /></div></div>} />
+                    <Route path="/about" element={<div className="absolute inset-0 z-20 pointer-events-auto overflow-y-auto overscroll-contain"><div className="min-h-full"><AboutPage onNavigate={handleNavigate} /></div></div>} />
+                    <Route path="/contact" element={<div className="absolute inset-0 z-20 pointer-events-auto overflow-y-auto overscroll-contain"><div className="min-h-full"><ContactPage onNavigate={handleNavigate} /></div></div>} />
+                    <Route path="/privacy" element={<div className="absolute inset-0 z-20 pointer-events-auto overflow-y-auto overscroll-contain"><div className="min-h-full"><PrivacyPolicyPage onNavigate={handleNavigate} /></div></div>} />
+                    <Route path="*" element={null} />
+                </Routes>
             </AnimatePresence>
 
-            {/* Mobile/Tablet Home View: Render special SwipeScroll component instead of main Canvas */}
             {view === 'HOME' && shouldUseMobileLayout ? (
                 <div className={`absolute inset-0 z-0 transition-opacity duration-75 ${isCanvasVisible ? 'opacity-100' : 'opacity-0'}`} style={{ willChange: 'opacity', transform: 'translateZ(0)' }}>
                     <MobileSwipeScroll key={`mobile-home-${resetKey}`} onNavigate={handleNavigate} />
                 </div>
             ) : (
-                /* Desktop Home View & Other Views: Main Canvas */
                 <div className={`absolute inset-0 z-0 transition-opacity duration-75 ${isCanvasVisible ? 'opacity-100' : 'opacity-0'}`} style={{ willChange: 'opacity', transform: 'translateZ(0)' }}>
                     <Canvas
                         dpr={[1, 2]}

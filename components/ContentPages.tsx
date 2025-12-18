@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { createPortal } from 'react-dom';
+import { Helmet } from 'react-helmet-async';
 import { ViewState } from '../types';
 
 const FORM_ENDPOINT = "https://formspree.io/f/xeobddbo";
@@ -81,13 +82,20 @@ const PRODUCTS = [
 ];
 
 export const ProjectsPage = ({ onNavigate }: { onNavigate: (view: ViewState) => void }) => (
-    <motion.div 
+    <motion.div
         className="w-full max-w-7xl mx-auto px-4 md:px-12 pt-32 pb-12"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
         exit="exit"
     >
+        <Helmet>
+            <title>プロダクト | 株式会社ドットファウンド</title>
+            <meta name="description" content="株式会社ドットファウンドのプロダクト一覧。SaaS・AI・ブロックチェーン・WEB開発を軸に、多様なソリューションをお届けします。" />
+            <meta property="og:title" content="プロダクト | 株式会社ドットファウンド" />
+            <meta property="og:description" content="株式会社ドットファウンドのプロダクト一覧。SaaS・AI・ブロックチェーン・WEB開発を軸に、多様なソリューションをお届けします。" />
+            <meta property="og:url" content="https://www.dotfound.co.jp/product" />
+        </Helmet>
         <motion.h1 variants={itemVariants} className="text-4xl sm:text-5xl md:text-8xl font-display font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-600 leading-none tracking-tighter">
             OUR<br />PRODUCTS
         </motion.h1>
@@ -139,15 +147,22 @@ export const ProjectsPage = ({ onNavigate }: { onNavigate: (view: ViewState) => 
 );
 
 export const AboutPage = ({ onNavigate }: { onNavigate: (view: ViewState) => void }) => (
-    <motion.div 
+    <motion.div
         className="w-full max-w-5xl mx-auto px-5 md:px-12 pt-32 pb-20 min-h-screen"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
         exit="exit"
     >
-        <motion.h1 
-            variants={itemVariants} 
+        <Helmet>
+            <title>会社概要 | 株式会社ドットファウンド</title>
+            <meta name="description" content="株式会社ドットファウンドの会社概要。AI・テクノロジーの力で人の心を起点とした革新的なソリューションを提供します。" />
+            <meta property="og:title" content="会社概要 | 株式会社ドットファウンド" />
+            <meta property="og:description" content="株式会社ドットファウンドの会社概要。AI・テクノロジーの力で人の心を起点とした革新的なソリューションを提供します。" />
+            <meta property="og:url" content="https://www.dotfound.co.jp/about" />
+        </Helmet>
+        <motion.h1
+            variants={itemVariants}
             className="text-4xl sm:text-5xl md:text-8xl font-display font-bold mb-16 text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-600 leading-none tracking-tighter"
         >
             COMPANY<br />PROFILE
@@ -232,13 +247,22 @@ export const AboutPage = ({ onNavigate }: { onNavigate: (view: ViewState) => voi
 );
 
 export const PrivacyPolicyPage = ({ onNavigate, isModal }: { onNavigate: (view: ViewState) => void, isModal?: boolean }) => (
-    <motion.div 
+    <motion.div
         className={`w-full max-w-5xl mx-auto px-5 md:px-12 ${isModal ? 'pt-10' : 'pt-32'} pb-20 ${isModal ? '' : 'min-h-screen'}`}
         variants={containerVariants}
         initial="hidden"
         animate="visible"
         exit="exit"
     >
+        {!isModal && (
+            <Helmet>
+                <title>プライバシーポリシー | 株式会社ドットファウンド</title>
+                <meta name="description" content="株式会社ドットファウンドのプライバシーポリシー。個人情報の保護に関する基本方針と取り扱いについて。" />
+                <meta property="og:title" content="プライバシーポリシー | 株式会社ドットファウンド" />
+                <meta property="og:description" content="株式会社ドットファウンドのプライバシーポリシー。個人情報の保護に関する基本方針と取り扱いについて。" />
+                <meta property="og:url" content="https://www.dotfound.co.jp/privacy" />
+            </Helmet>
+        )}
         <motion.h1 variants={itemVariants} className="text-4xl sm:text-5xl md:text-8xl font-display font-bold mb-16 text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-600 leading-none tracking-tighter">
             PRIVACY<br />POLICY
         </motion.h1>
@@ -474,13 +498,20 @@ ${formData.message}`;
     }
 
     return (
-        <motion.div 
+        <motion.div
             className="w-full max-w-4xl mx-auto px-5 md:px-12 pt-32 pb-12 min-h-screen flex flex-col justify-center"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
             exit="exit"
         >
+            <Helmet>
+                <title>お問い合わせ | 株式会社ドットファウンド</title>
+                <meta name="description" content="株式会社ドットファウンドへのお問い合わせフォーム。サービスに関するご質問やご相談はこちらからお気軽にお問い合わせください。" />
+                <meta property="og:title" content="お問い合わせ | 株式会社ドットファウンド" />
+                <meta property="og:description" content="株式会社ドットファウンドへのお問い合わせフォーム。サービスに関するご質問やご相談はこちらからお気軽にお問い合わせください。" />
+                <meta property="og:url" content="https://www.dotfound.co.jp/contact" />
+            </Helmet>
             <motion.h1 variants={itemVariants} className="text-4xl sm:text-5xl md:text-8xl font-display font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-600 leading-none tracking-tighter">
                 CONTACT
             </motion.h1>
