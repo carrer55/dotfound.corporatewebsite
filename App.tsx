@@ -1,5 +1,4 @@
 import React, { Suspense, useState, useEffect, useCallback, memo } from 'react';
-import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { Canvas } from '@react-three/fiber';
 import { SceneWrapper } from './components/Scene';
 import { CustomCursor } from './components/CustomCursor';
@@ -10,7 +9,6 @@ import { Navbar } from './components/Navbar';
 import { TransitionCurtain } from './components/TransitionCurtain';
 import { ProjectsPage, AboutPage, ContactPage, PrivacyPolicyPage } from './components/ContentPages';
 import { MobileSwipeScroll } from './components/MobileSwipeScroll';
-import { ScrollToTop } from './components/ScrollToTop';
 import { SEO } from './components/SEO';
 import { ViewState } from './types';
 
@@ -52,38 +50,9 @@ const useIsTablet = () => {
     return isTablet;
 };
 
-const pathToView = (path: string): ViewState => {
-    switch (path) {
-        case '/product':
-            return 'PRODUCT';
-        case '/about':
-            return 'ABOUT_US';
-        case '/contact':
-            return 'CONTACT';
-        case '/privacy':
-            return 'PRIVACY_POLICY';
-        default:
-            return 'HOME';
-    }
-};
-
-const viewToPath = (view: ViewState): string => {
-    switch (view) {
-        case 'PRODUCT':
-            return '/product';
-        case 'ABOUT_US':
-            return '/about';
-        case 'CONTACT':
-            return '/contact';
-        case 'PRIVACY_POLICY':
-            return '/privacy';
-        default:
-            return '/';
-    }
-};
-
 const App = () => {
     const [isLoaded, setIsLoaded] = useState(false);
+    const [view, setView] = useState<ViewState>('HOME');
     const [targetView, setTargetView] = useState<ViewState>('HOME');
     const [isTransitioning, setIsTransitioning] = useState(false);
     const [isCanvasVisible, setIsCanvasVisible] = useState(true);
@@ -91,9 +60,6 @@ const App = () => {
     const isMobile = useIsMobile();
     const isTablet = useIsTablet();
     const shouldUseMobileLayout = isMobile || isTablet;
-    const navigate = useNavigate();
-    const location = useLocation();
-    const view = pathToView(location.pathname);
 
     useEffect(() => {
         const timer = setTimeout(() => setIsLoaded(true), 2000);
@@ -113,7 +79,7 @@ const App = () => {
             if (newView === view) {
                 setResetKey(prev => prev + 1);
             } else {
-                navigate(viewToPath(newView));
+                setView(newView);
             }
 
             setTimeout(() => {
@@ -122,11 +88,10 @@ const App = () => {
             }, 150);
 
         }, 1050);
-    }, [isTransitioning, view, navigate]);
+    }, [isTransitioning, view]);
 
     return (
         <div className={`w-full h-screen bg-[#050505] text-white overflow-hidden relative ${shouldUseMobileLayout ? '' : 'cursor-none'}`}>
-            <ScrollToTop />
             <GrainOverlay />
 
             {view === 'HOME' && (
@@ -150,14 +115,34 @@ const App = () => {
             <TransitionCurtain isVisible={isTransitioning} targetView={targetView} />
 
             <AnimatePresence mode="wait">
-                <Routes location={location} key={location.pathname}>
-                    <Route path="/" element={null} />
-                    <Route path="/product" element={<div className="absolute inset-0 z-20 pointer-events-auto overflow-y-auto overscroll-contain"><div className="min-h-full"><ProjectsPage onNavigate={handleNavigate} /></div></div>} />
-                    <Route path="/about" element={<div className="absolute inset-0 z-20 pointer-events-auto overflow-y-auto overscroll-contain"><div className="min-h-full"><AboutPage onNavigate={handleNavigate} /></div></div>} />
-                    <Route path="/contact" element={<div className="absolute inset-0 z-20 pointer-events-auto overflow-y-auto overscroll-contain"><div className="min-h-full"><ContactPage onNavigate={handleNavigate} /></div></div>} />
-                    <Route path="/privacy" element={<div className="absolute inset-0 z-20 pointer-events-auto overflow-y-auto overscroll-contain"><div className="min-h-full"><PrivacyPolicyPage onNavigate={handleNavigate} /></div></div>} />
-                    <Route path="*" element={null} />
-                </Routes>
+                {view === 'PRODUCT' && (
+                    <div key="product" className="absolute inset-0 z-20 pointer-events-auto overflow-y-auto overscroll-contain">
+                        <div className="min-h-full">
+                            <ProjectsPage onNavigate={handleNavigate} />
+                        </div>
+                    </div>
+                )}
+                {view === 'ABOUT_US' && (
+                    <div key="about" className="absolute inset-0 z-20 pointer-events-auto overflow-y-auto overscroll-contain">
+                        <div className="min-h-full">
+                            <AboutPage onNavigate={handleNavigate} />
+                        </div>
+                    </div>
+                )}
+                {view === 'CONTACT' && (
+                    <div key="contact" className="absolute inset-0 z-20 pointer-events-auto overflow-y-auto overscroll-contain">
+                        <div className="min-h-full">
+                            <ContactPage onNavigate={handleNavigate} />
+                        </div>
+                    </div>
+                )}
+                {view === 'PRIVACY_POLICY' && (
+                    <div key="privacy" className="absolute inset-0 z-20 pointer-events-auto overflow-y-auto overscroll-contain">
+                        <div className="min-h-full">
+                            <PrivacyPolicyPage onNavigate={handleNavigate} />
+                        </div>
+                    </div>
+                )}
             </AnimatePresence>
 
             {view === 'HOME' && shouldUseMobileLayout ? (
