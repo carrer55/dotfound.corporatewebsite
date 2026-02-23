@@ -181,9 +181,15 @@ export const AboutPage = ({ onNavigate }: { onNavigate: (view: ViewState) => voi
             {/* Location */}
             <div className="py-8 border-b border-gray-800 flex flex-col md:flex-row md:justify-between md:items-start group hover:bg-white/5 transition-colors duration-300 px-2">
                 <span className="font-mono text-xs text-gray-500 tracking-widest mb-2 md:mb-0 pt-1 w-32">LOCATION</span>
-                <div className="md:w-3/4 text-base md:text-lg font-light leading-relaxed text-gray-200">
-                    本社　　　　静岡県富士宮市大宮町31 澤田ビル 2F<br />
-                    東京Office　東京都港区浜松町2-7-13 BizFeel浜松町3F
+                <div className="md:w-3/4 text-sm md:text-lg font-light leading-relaxed text-gray-200 space-y-2">
+                    <div className="flex flex-col md:flex-row md:gap-4">
+                        <span className="min-w-[100px] md:min-w-[120px] whitespace-nowrap">本社</span>
+                        <span className="break-words">静岡県富士宮市大宮町31 澤田ビル 2F</span>
+                    </div>
+                    <div className="flex flex-col md:flex-row md:gap-4">
+                        <span className="min-w-[100px] md:min-w-[120px] whitespace-nowrap">東京Office</span>
+                        <span className="break-words">東京都港区浜松町2-7-13 BizFeel浜松町3F</span>
+                    </div>
                 </div>
             </div>
 
