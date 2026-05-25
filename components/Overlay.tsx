@@ -101,9 +101,9 @@ export const Overlay: React.FC<OverlayProps> = ({ onNavigate }) => {
             <Section className="items-center justify-center">
                 <div className="max-w-5xl relative pointer-events-auto md:ml-20" data-hover>
                     <motion.div
-                        initial={{ opacity: 0, filter: "blur(10px)" }}
-                        whileInView={{ opacity: 1, filter: "blur(0px)" }}
-                        transition={{ duration: 1 }}
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8 }}
                     >
                         <div className="text-xs font-mono text-cyan-300 mb-2 tracking-widest">CORE OF THINKING</div>
                         <h2 className="text-5xl sm:text-6xl md:text-8xl font-display font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-b from-white to-transparent opacity-80 leading-none tracking-tighter">

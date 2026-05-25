@@ -594,38 +594,18 @@ export const PrismaticArtifact = () => {
         <group position={[isMobile ? 0 : -2.5, yPosition, 0]} ref={groupRef}>
             <mesh scale={isMobile ? 1.5 : 2.2}>
                 <icosahedronGeometry args={[1, 0]} />
-                {isMobile ? (
-                    <MeshTransmissionMaterial
-                        backside
-                        samples={Math.max(2, Math.round(3 * settings.geometryDetail))}
-                        resolution={isMobile ? settings.transmissionResolution : Math.min(512, settings.transmissionResolution)}
-                        thickness={0.5}
-                        chromaticAberration={1}
-                        anisotropy={0.2}
-                        distortion={0.5}
-                        iridescence={1}
-                        roughness={0.1}
-                        color="#e0e0ff"
-                    />
-                ) : (
-                    <meshPhysicalMaterial
-                        color="#e0e0ff"
-                        transmission={1.0}
-                        roughness={0.1}
-                        metalness={0.0}
-                        ior={1.5}
-                        thickness={0.5}
-                        iridescence={1.0}
-                        iridescenceIOR={1.2}
-                        iridescenceThicknessRange={[0, 1400]}
-                        clearcoat={1.0}
-                        clearcoatRoughness={0.1}
-                        transparent={true}
-                        envMapIntensity={3.0}
-                        toneMapped={false}
-                        side={THREE.DoubleSide}
-                    />
-                )}
+                {/* Highly optimized fake glass: uses alpha blending instead of expensive refraction pass */}
+                <meshPhysicalMaterial
+                    color="#e0e0ff"
+                    roughness={0.1}
+                    metalness={0.8}
+                    ior={1.5}
+                    transparent={true}
+                    opacity={0.3}
+                    envMapIntensity={4.0}
+                    clearcoat={1.0}
+                    clearcoatRoughness={0.1}
+                />
             </mesh>
         </group>
     );
