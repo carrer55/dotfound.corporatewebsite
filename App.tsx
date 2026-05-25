@@ -76,19 +76,29 @@ const App = () => {
         setTimeout(() => {
             setIsCanvasVisible(false);
 
-            if (newView === view) {
+            // Always increment resetKey when going to HOME to guarantee a full
+            // remount of Canvas + ScrollControls, resetting scroll offset to 0.
+            if (newView === 'HOME') {
+                setView(newView);
+                setResetKey(prev => prev + 1);
+            } else if (newView === view) {
                 setResetKey(prev => prev + 1);
             } else {
                 setView(newView);
             }
 
+            // When returning to HOME, wait longer before fade-in so that the
+            // CameraRig's useEffect can snap camera.position back to [0,0,5]
+            // before the scene becomes visible. Other transitions use 150ms.
+            const fadeInDelay = newView === 'HOME' ? 350 : 150;
             setTimeout(() => {
                 setIsCanvasVisible(true);
                 setIsTransitioning(false);
-            }, 150);
+            }, fadeInDelay);
 
         }, 1050);
     }, [isTransitioning, view]);
+
 
     return (
         <div className={`w-full h-screen bg-[#050505] text-white overflow-hidden relative ${shouldUseMobileLayout ? '' : 'cursor-none'}`}>
@@ -152,7 +162,7 @@ const App = () => {
             ) : (
                 <div className={`absolute inset-0 z-0 transition-opacity duration-75 ${isCanvasVisible ? 'opacity-100' : 'opacity-0'}`} style={{ willChange: 'opacity', transform: 'translateZ(0)' }}>
                     <Canvas
-                        dpr={[1, 2]}
+                        dpr={[1, 1.5]}
                         camera={{ position: [0, 0, 5], fov: 45 }}
                         gl={{ antialias: true, alpha: false, powerPreference: 'high-performance' }}
                         className="w-full h-full"

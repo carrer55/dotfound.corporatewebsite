@@ -108,6 +108,7 @@ const HeroComposition = () => {
     const textGroupRef = useRef<THREE.Group>(null);
     const sphereMatRef = useRef<any>(null);
     const textMatRef = useRef<any>(null);
+    const mainGroupRef = useRef<THREE.Group>(null);
     const scroll = useScroll();
     const { width, height } = useThree((state) => state.viewport);
     const { mouse } = useThree();
@@ -149,9 +150,10 @@ const HeroComposition = () => {
     const sphereStartY = 0.5;
     const textY = isMobile ? (sphereStartY - 0.65 - 0.4) : (sphereStartY - 0.7); 
     
+    // Mobile only: drei MeshTransmissionMaterial (full FBO pass per object)
     const crystalMaterialProps = useMemo(() => ({
-        samples: Math.round((isMobile ? 4 : settings.transmissionSamples) * settings.geometryDetail),
-        resolution: isMobile ? 512 : settings.transmissionResolution,
+        samples: Math.round(4 * settings.geometryDetail),
+        resolution: 512,
         thickness: 1.5,
         chromaticAberration: 1.0,
         anisotropy: 0.3,
@@ -165,9 +167,57 @@ const HeroComposition = () => {
         color: "#eef2ff",
         background: new THREE.Color('#000000'),
         toneMapped: false,
-    }), [isMobile, settings]);
+    }), [settings]);
+
+    // Desktop only: native THREE.js MeshPhysicalMaterial — NO per-object FBO pass
+    // Uses a single shared background copy for all transmissive objects → dramatically lighter
+    const desktopSphereMaterialProps = useMemo(() => ({
+        color: "#eef2ff",
+        transmission: 1.0,
+        roughness: 0.0,
+        metalness: 0.0,
+        ior: 1.5,
+        thickness: 2.0,
+        iridescence: 1.0,
+        iridescenceIOR: 1.2,
+        iridescenceThicknessRange: [0, 1400] as [number, number],
+        clearcoat: 1.0,
+        clearcoatRoughness: 0.0,
+        transparent: true,
+        envMapIntensity: 3.0,
+        toneMapped: false,
+    }), []);
+
+    const desktopTextMaterialProps = useMemo(() => ({
+        color: "#eef2ff",
+        transmission: 1.0,
+        roughness: 0.0,
+        metalness: 0.0,
+        ior: 1.5,
+        thickness: 1.5,
+        iridescence: 1.0,
+        iridescenceIOR: 1.2,
+        iridescenceThicknessRange: [0, 1400] as [number, number],
+        clearcoat: 1.0,
+        clearcoatRoughness: 0.0,
+        transparent: true,
+        envMapIntensity: 3.0,
+        toneMapped: false,
+        side: THREE.DoubleSide,
+    }), []);
+    
+    // NOTE: Scroll and position reset is now handled by Canvas remount (resetKey in App.tsx).
+    // This ensures scroll.offset truly starts at 0 and all Three.js state is fresh.
+
     
     useFrame((state) => {
+        const currentPage = scroll.offset * (scroll.pages - 1);
+        const isVisible = isMobile || currentPage <= 2.2;
+        if (mainGroupRef.current) {
+            mainGroupRef.current.visible = isVisible;
+        }
+        if (!isVisible) return;
+
         // Reduced throttle for smoother desktop experience
         if (!isMobile) {
             frameThrottle.current++;
@@ -260,19 +310,19 @@ const HeroComposition = () => {
                 sphereRef.current.rotation.x = baseRotX;
                 sphereRef.current.rotation.y = baseRotY;
 
-                // 4. Sphere Material Reaction
+                // 4. Sphere Material Reaction (Desktop: MeshPhysicalMaterial)
                 if (sphereMatRef.current) {
                     sphereMatRef.current.color.lerpColors(initialColor, targetColor, absorbEase);
 
                     const pulse = (Math.sin(time * 1.1) + 1) * 0.5;
                     const impactDistortion = Math.sin(absorbEase * Math.PI) * 2.0;
 
-                    sphereMatRef.current.chromaticAberration = 1.2 + pulse * 1.5 + impactDistortion * 3.0;
-
-                    const baseDistortion = THREE.MathUtils.lerp(crystalMaterialProps.distortion, 0.8, absorbEase);
-                    sphereMatRef.current.distortion = baseDistortion + pulse * 0.4 + impactDistortion;
-
-                    sphereMatRef.current.thickness = 1.2 + Math.cos(time * 0.7) * 0.5;
+                    // iridescence replaces chromaticAberration for the energy-pulse feel
+                    sphereMatRef.current.iridescence = Math.min(1.0, 0.5 + pulse * 0.4 + impactDistortion * 0.1);
+                    // thickness drives the depth/absorption visual
+                    sphereMatRef.current.thickness = 1.2 + Math.cos(time * 0.7) * 0.5 + impactDistortion * 0.4;
+                    // subtle roughness surge on impact
+                    sphereMatRef.current.roughness = Math.max(0, impactDistortion * 0.04);
                 }
 
                 // --- Text Behavior (Sucked into the background sphere) ---
@@ -305,11 +355,13 @@ const HeroComposition = () => {
                     textGroupRef.current.rotation.x = THREE.MathUtils.lerp(0, Math.PI / 6, moveEase);
                     textGroupRef.current.rotation.z = THREE.MathUtils.lerp(0, -Math.PI / 4, moveEase);
 
-                    // 5. Text Material (Liquify and dissolve)
+                    // 5. Text Material (Dissolve) — Desktop: MeshPhysicalMaterial props
                     if (textMatRef.current) {
-                        textMatRef.current.distortion = THREE.MathUtils.lerp(0.4, 4.5, moveEase);
+                        // roughness replaces distortion for the melting look
+                        textMatRef.current.roughness = THREE.MathUtils.lerp(0.0, 0.25, moveEase);
                         textMatRef.current.thickness = THREE.MathUtils.lerp(1.5, 0.0, moveEase);
-                        textMatRef.current.chromaticAberration = THREE.MathUtils.lerp(1.0, 6.0, moveEase);
+                        // iridescence replaces chromaticAberration for colour-shift dissolve
+                        textMatRef.current.iridescence = THREE.MathUtils.lerp(1.0, 0.0, moveEase);
                         textMatRef.current.opacity = THREE.MathUtils.lerp(1.0, 0.0, moveEase);
                     }
                 }
@@ -321,7 +373,7 @@ const HeroComposition = () => {
     });
 
     return (
-        <group>
+        <group ref={mainGroupRef}>
             <MovingLight />
             {/* Reduced float intensity since we handle manual floating logic in frame loop for Desktop */}
             <Float 
@@ -335,11 +387,20 @@ const HeroComposition = () => {
                     ref={sphereRef}
                     position={[0, sphereStartY, isMobile ? 0 : -3.0]}
                 >
-                    <sphereGeometry args={[1, 32, 32]} />
-                    <MeshTransmissionMaterial
-                        ref={sphereMatRef}
-                        {...crystalMaterialProps}
-                    />
+                    {/* Geometry: mobile keeps 32 segs, desktop 24 segs (still silky smooth) */}
+                    <sphereGeometry args={[1, isMobile ? 32 : 24, isMobile ? 32 : 24]} />
+                    {isMobile ? (
+                        <MeshTransmissionMaterial
+                            ref={sphereMatRef}
+                            {...crystalMaterialProps}
+                        />
+                    ) : (
+                        // Desktop: native MeshPhysicalMaterial — no FBO render pass
+                        <meshPhysicalMaterial
+                            ref={sphereMatRef}
+                            {...desktopSphereMaterialProps}
+                        />
+                    )}
                 </mesh>
 
                 {/* The Text */}
@@ -356,25 +417,33 @@ const HeroComposition = () => {
                             font={fontUrl}
                             size={textSize}
                             height={isMobile ? 0.3 : 0.4}
-                            curveSegments={Math.round((isMobile ? 12 : 16) * settings.geometryDetail)}
+                            curveSegments={Math.round((isMobile ? 12 : 8) * settings.geometryDetail)}
                             bevelEnabled
                             bevelThickness={isMobile ? 0.03 : 0.05}
                             bevelSize={isMobile ? 0.01 : 0.02}
                             bevelOffset={0}
-                            bevelSegments={Math.round((isMobile ? 3 : 4) * settings.geometryDetail)}
+                            bevelSegments={Math.round((isMobile ? 3 : 2) * settings.geometryDetail)}
                             letterSpacing={-0.03}
                         >
                             FOUND
-                            <MeshTransmissionMaterial
-                                ref={textMatRef}
-                                backside
-                                {...crystalMaterialProps}
-                                samples={isMobile ? 4 : 10} 
-                                resolution={isMobile ? 512 : 1024}
-                                thickness={1.5}
-                                roughness={0.0}
-                                anisotropy={0.5}
-                            />
+                            {isMobile ? (
+                                <MeshTransmissionMaterial
+                                    ref={textMatRef}
+                                    backside
+                                    {...crystalMaterialProps}
+                                    samples={4}
+                                    resolution={512}
+                                    thickness={1.5}
+                                    roughness={0.0}
+                                    anisotropy={0.5}
+                                />
+                            ) : (
+                                // Desktop: native MeshPhysicalMaterial — no FBO render pass
+                                <meshPhysicalMaterial
+                                    ref={textMatRef}
+                                    {...desktopTextMaterialProps}
+                                />
+                            )}
                         </Text3D>
                     </Center>
                 </group>
@@ -386,15 +455,24 @@ const HeroComposition = () => {
 // Desktop Product Panel with heavy tilt effect (thick panel)
 const DesktopProductPanel = () => {
     const groupRef = useRef<THREE.Group>(null);
+    const mainGroupRef = useRef<THREE.Group>(null);
     const materialRef = useRef<THREE.MeshStandardMaterial>(null);
     const { height } = useThree((state) => state.viewport);
     const { mouse } = useThree((state) => state);
+    const scroll = useScroll();
     const texture = useTexture("https://images.unsplash.com/photo-1550684848-fac1c5b4e853?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80");
 
     // Target rotation values for smooth interpolation
     const targetRotation = useRef({ x: 0, y: 0 });
 
     useFrame((state, delta) => {
+        const currentPage = scroll.offset * (scroll.pages - 1);
+        const isVisible = currentPage >= 0.2 && currentPage <= 2.8;
+        if (mainGroupRef.current) {
+            mainGroupRef.current.visible = isVisible;
+        }
+        if (!isVisible) return;
+
         const time = state.clock.elapsedTime;
 
         if (groupRef.current && materialRef.current) {
@@ -424,7 +502,7 @@ const DesktopProductPanel = () => {
 
     return (
         // 🔒 LOCKED DESKTOP POSITION - DO NOT MODIFY
-        <group position={[0, POS_PRODUCTS * height, 0]}>
+        <group ref={mainGroupRef} position={[0, POS_PRODUCTS * height, 0]}>
             {/* Dynamic Lights for the panel */}
             <pointLight position={[3, 2, 4]} intensity={1.5} color="#00ffff" distance={10} />
             <pointLight position={[-3, -2, -4]} intensity={1.5} color="#ff9900" distance={10} />
@@ -468,6 +546,11 @@ export const PrismaticArtifact = () => {
     const { height, width } = useThree((state) => state.viewport);
     const isMobile = width < 6.0;
 
+    let scroll: any = null;
+    try {
+        scroll = useScroll();
+    } catch (e) {}
+
     // Mobile: Always use high performance settings
     const adaptiveSettings = useAdaptiveQuality();
     const settings = isMobile ? {
@@ -482,6 +565,13 @@ export const PrismaticArtifact = () => {
     const frameThrottle = useRef(0);
 
     useFrame((state) => {
+        const currentPage = scroll ? scroll.offset * (scroll.pages - 1) : 0;
+        const isVisible = isMobile || !scroll || (currentPage >= 1.8 && currentPage <= 4.2);
+        if (groupRef.current) {
+            groupRef.current.visible = isVisible;
+        }
+        if (!isVisible) return;
+
         if (!isMobile) {
             frameThrottle.current++;
             if (frameThrottle.current < Math.max(1, settings.updateThrottle - 1)) return;
@@ -504,18 +594,38 @@ export const PrismaticArtifact = () => {
         <group position={[isMobile ? 0 : -2.5, yPosition, 0]} ref={groupRef}>
             <mesh scale={isMobile ? 1.5 : 2.2}>
                 <icosahedronGeometry args={[1, 0]} />
-                <MeshTransmissionMaterial
-                    backside
-                    samples={Math.max(2, Math.round(3 * settings.geometryDetail))}
-                    resolution={settings.transmissionResolution}
-                    thickness={0.5}
-                    chromaticAberration={1}
-                    anisotropy={0.2}
-                    distortion={0.5}
-                    iridescence={1}
-                    roughness={0.1}
-                    color="#e0e0ff"
-                />
+                {isMobile ? (
+                    <MeshTransmissionMaterial
+                        backside
+                        samples={Math.max(2, Math.round(3 * settings.geometryDetail))}
+                        resolution={isMobile ? settings.transmissionResolution : Math.min(512, settings.transmissionResolution)}
+                        thickness={0.5}
+                        chromaticAberration={1}
+                        anisotropy={0.2}
+                        distortion={0.5}
+                        iridescence={1}
+                        roughness={0.1}
+                        color="#e0e0ff"
+                    />
+                ) : (
+                    <meshPhysicalMaterial
+                        color="#e0e0ff"
+                        transmission={1.0}
+                        roughness={0.1}
+                        metalness={0.0}
+                        ior={1.5}
+                        thickness={0.5}
+                        iridescence={1.0}
+                        iridescenceIOR={1.2}
+                        iridescenceThicknessRange={[0, 1400]}
+                        clearcoat={1.0}
+                        clearcoatRoughness={0.1}
+                        transparent={true}
+                        envMapIntensity={3.0}
+                        toneMapped={false}
+                        side={THREE.DoubleSide}
+                    />
+                )}
             </mesh>
         </group>
     );
@@ -524,7 +634,12 @@ export const PrismaticArtifact = () => {
 export const KineticGrid = () => {
     const meshRef = useRef<THREE.InstancedMesh>(null);
     const { height, width } = useThree((state) => state.viewport);
-    const scroll = useScroll();
+    
+    let scroll: any = null;
+    try {
+        scroll = useScroll();
+    } catch (e) {}
+
     const isMobile = width < 6.0;
 
     // Always use high performance settings for consistent grid size
@@ -555,6 +670,13 @@ export const KineticGrid = () => {
 
     useFrame((state) => {
         if (!meshRef.current) return;
+
+        const currentPage = scroll ? scroll.offset * (scroll.pages - 1) : 0;
+        const isVisible = isMobile || !scroll || (currentPage >= 3.0 && currentPage <= 7.8);
+        if (meshRef.current) {
+            meshRef.current.visible = isVisible;
+        }
+        if (!isVisible) return;
 
         if (!isMobile) {
             frameThrottle.current++;
@@ -625,8 +747,14 @@ export const KineticGrid = () => {
 // Exporting to be reusable
 export const Singularity = ({ colorStart = '#ff3300', colorEnd = '#000000', scale = 1.0 }: { colorStart?: string, colorEnd?: string, scale?: number }) => {
     const blackHoleRef = useRef<THREE.Mesh>(null);
+    const mainGroupRef = useRef<THREE.Group>(null);
     const { height, width } = useThree((state) => state.viewport);
     const isMobile = width < 6.0;
+
+    let scroll: any = null;
+    try {
+        scroll = useScroll();
+    } catch (e) {}
 
     // Mobile: Always use high performance settings
     const adaptiveSettings = useAdaptiveQuality();
@@ -670,6 +798,13 @@ export const Singularity = ({ colorStart = '#ff3300', colorEnd = '#000000', scal
     }, [particleCount]);
 
     useFrame((state) => {
+        const currentPage = scroll ? scroll.offset * (scroll.pages - 1) : 0;
+        const isVisible = isMobile || !scroll || (currentPage >= 4.5 && currentPage <= 8.0);
+        if (mainGroupRef.current) {
+            mainGroupRef.current.visible = isVisible;
+        }
+        if (!isVisible) return;
+
         if (!isMobile) {
             frameThrottle.current++;
             if (frameThrottle.current < Math.max(1, settings.updateThrottle - 1)) return;
@@ -689,7 +824,7 @@ export const Singularity = ({ colorStart = '#ff3300', colorEnd = '#000000', scal
     return (
         // 🔒 LOCKED DESKTOP POSITION - DO NOT MODIFY
         // Desktop Y-Offset: +1.5 from POS_DOT
-        <group position={[0, isMobile ? 0 : POS_DOT * height + 1.5, 0]} scale={scale}>
+        <group ref={mainGroupRef} position={[0, isMobile ? 0 : POS_DOT * height + 1.5, 0]} scale={scale}>
             <points>
                 <bufferGeometry>
                     <bufferAttribute attach="attributes-position" count={particleCount} array={positions} itemSize={3} />
@@ -709,7 +844,20 @@ export const Singularity = ({ colorStart = '#ff3300', colorEnd = '#000000', scal
 const CameraRig = () => {
     const scroll = useScroll();
     const { height, width } = useThree((state) => state.viewport);
+    const { camera } = useThree();
     const isMobile = width < 6.0;
+
+    // On mount: immediately snap camera and scroll to origin so there is no
+    // visible drift when returning to HOME from another page. The Canvas element
+    // persists across SceneWrapper remounts, so Three.js camera state must be
+    // reset manually here rather than relying on React re-initialisation.
+    useEffect(() => {
+        camera.position.set(0, 0, 5);
+        camera.rotation.set(0, 0, 0);
+        if (scroll.el) {
+            scroll.el.scrollTop = 0;
+        }
+    }, [camera, scroll.el]);
 
     useFrame((state) => {
         const offset = scroll.offset;
