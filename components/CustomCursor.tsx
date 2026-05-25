@@ -7,35 +7,21 @@ export const CustomCursor = memo(() => {
     const cursorY = useMotionValue(-100);
 
     // Dot configuration: High stiffness, low mass for instant, snappy response
-    const springConfigDot = { damping: 50, stiffness: 1000, mass: 0.1 };
+    const springConfigDot = { damping: 30, stiffness: 2000, mass: 0.05 };
     const dotX = useSpring(cursorX, springConfigDot);
     const dotY = useSpring(cursorY, springConfigDot);
 
     // Ring configuration: Slightly more damping/mass for a smooth follow effect
-    const springConfigRing = { damping: 40, stiffness: 400, mass: 0.5 };
+    const springConfigRing = { damping: 35, stiffness: 600, mass: 0.3 };
     const ringX = useSpring(cursorX, springConfigRing);
     const ringY = useSpring(cursorY, springConfigRing);
 
     const [isHovering, setIsHovering] = useState(false);
 
     useEffect(() => {
-        let rafId: number | null = null;
-        let pendingUpdate = false;
-        let lastX = 0;
-        let lastY = 0;
-
         const moveCursor = (e: MouseEvent) => {
-            lastX = e.clientX;
-            lastY = e.clientY;
-
-            if (!pendingUpdate) {
-                pendingUpdate = true;
-                rafId = requestAnimationFrame(() => {
-                    cursorX.set(lastX);
-                    cursorY.set(lastY);
-                    pendingUpdate = false;
-                });
-            }
+            cursorX.set(e.clientX);
+            cursorY.set(e.clientY);
         };
 
         const handleMouseOver = (e: MouseEvent) => {
@@ -55,7 +41,6 @@ export const CustomCursor = memo(() => {
         window.addEventListener('mouseover', handleMouseOver, { passive: true });
 
         return () => {
-            if (rafId) cancelAnimationFrame(rafId);
             window.removeEventListener('mousemove', moveCursor);
             window.removeEventListener('mouseover', handleMouseOver);
         };

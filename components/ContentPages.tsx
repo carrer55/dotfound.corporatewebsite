@@ -52,11 +52,19 @@ const PRODUCTS = [
         title: "「賢者の精算」",
         status: "(For Sale)",
         statusColor: "text-blue-400",
-        image: "https://i.imgur.com/6ahrJdW.png",
+        image: "/Product_kenjya2.png",
         link: "https://www.kenja.space/"
     },
     {
         label: "PRODUCT 02",
+        category: "オールインワン型福利厚生アプリ",
+        title: "「HUBby」",
+        status: "（2026.6.1 New Release）",
+        statusColor: "text-yellow-400",
+        image: "/Product_HUBby3.png"
+    },
+    {
+        label: "PRODUCT 03",
         category: "業務自動化AIプラットフォーム",
         title: "「AI派遣社員」",
         status: "(Coming Soon...)",
@@ -64,20 +72,12 @@ const PRODUCTS = [
         image: "https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
     },
     {
-        label: "PRODUCT 03",
+        label: "PRODUCT 04",
         category: "ブロックチェーン型キャリアサービス",
         title: "「JOBchain」",
         status: "(Developing...)",
         statusColor: "text-cyan-400",
         image: "https://images.unsplash.com/photo-1557683316-973673baf926?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-    },
-    {
-        label: "PRODUCT 04",
-        category: "HP制作、WEBアプリケーションの開発",
-        title: "「受託開発・制作」",
-        status: "（お気軽にご相談ください）",
-        statusColor: "text-green-400",
-        image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
     }
 ];
 

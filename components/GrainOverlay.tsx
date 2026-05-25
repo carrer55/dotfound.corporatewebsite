@@ -8,7 +8,7 @@ export const GrainOverlay = memo(() => {
                     <feTurbulence
                         type="fractalNoise"
                         baseFrequency="0.80"
-                        numOctaves="3"
+                        numOctaves="1"
                         stitchTiles="stitch"
                     />
                 </filter>
